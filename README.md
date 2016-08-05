@@ -18,11 +18,13 @@ formats using the [BinData] gem.
 * `openssl` binary for `--tls` without an explicit cert/key.
 * To build the UI, node.js and npm.  (Not needed at runtime)
 
-### From Gemfile
+### From Rubygems
 
-(Coming soon)
-Run `gem install binproxy-0.6.gem`.  You may need to use `sudo`, depending on
-your Ruby installation.
+~~~bash
+gem install binproxy
+~~~
+
+You may need to use `sudo`, depending on your Ruby installation.
 
 ### From Source
 
