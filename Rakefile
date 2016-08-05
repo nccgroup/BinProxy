@@ -43,6 +43,7 @@ task :spec do
 end
 
 task :'build-ui' do
+  sh "mkdir -p public/ui"
   sh "cp ui/node_modules/fixed-data-table/dist/fixed-data-table.css public/ui/fixed-data-table.css"
   sh "cd ui; ./node_modules/webpack/bin/webpack.js"
 end
