@@ -1,0 +1,24 @@
+
+- test suite
+
+
+- events should be visible in history
+
+- go through old TODO to see what's still
+- don't reload headers on reconnect
+- server should be source of truth for message index
+- message persistence: sqlite?
+
+- text input that round trips into a canonicalized form (eg hex dump, escaped text) loses cursor position (set to end) when value changes; prob needs manual workaround to save and restore cursor pos.
+
+- UI
+ - fix lint warnings
+ - directory structure
+
+way to manually kill connection
+drop messages to peer when conn closed
+
+inject messages
+
+configure tls up/down independently
+client certs

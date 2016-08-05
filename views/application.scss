@@ -1,0 +1,335 @@
+@import "common.scss";
+
+* { box-sizing: border-box; }
+html, body, #UIRoot {
+  height: 100%;
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.BinProxyUI {
+  display: flex;
+  flex-flow: column nowrap;
+  margin: 0;
+  padding: 5px;
+  height: 100%;
+
+  > .StatusBar {
+    @include blue-box;
+    flex: 0 0 auto;
+    margin: 5px 0;
+    span { margin-right: 1em; }
+    input[type=checkbox] { vertical-align: text-bottom; }
+
+    .websocket        { color: #800000 }
+    .websocket.active { color: #008000 }
+
+    .intercept.ready  { color: #008000 }
+    .intercept.active { color: #800000 }
+  }
+
+  > .MessagesTable {
+    flex: 0 0 auto;
+    z-index: 0;
+
+    // Steal the important stuff from react-bootstrap-table.css, and fix broken
+    // hardcoded values with... better hardcoded values?
+
+    //common table attributes
+    table {
+      width: 100%;
+      th, td, .table-header-column {
+        line-height: 25px;
+        vertical-align: top;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+
+    .table-header {
+      position: relative;
+      z-index: 2;
+      overflow: hidden;
+      table {
+        margin-bottom: 0;
+        th {
+          border: 1px solid black;
+          div {
+            padding-left: 1ex;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            background-color: #F2F9FF;
+          }
+        }
+      }
+    }
+
+    .table-container {
+      position: relative;
+      z-index: 1;
+      table {
+        //min-height: 200px;
+        th { visibility: hidden }
+      }
+      margin-top: -29px;
+      overflow-y: scroll;
+      height: 100%;
+    }
+
+    table {
+      border-collapse: collapse;
+      border: 1px solid black;
+      > tbody > tr {
+        > td {
+          background-color: #FFFFFF;
+          border: 1px solid black;
+          padding-left: 2px;
+        }
+        &.selected > td { background-color: #FFFFDD; }
+      }
+    }
+  }
+  > .MessageMeta {
+    flex: 0 0 auto;
+
+    fieldset.msginfo {
+      @include blue-box;
+      display: flex;
+      flex-flow: column nowrap;
+      //flex: 0 0 auto;
+      margin: 0;
+      padding-left: 6px;
+      padding-right: 6px;
+      margin-bottom: 1ex;
+      &.pending {
+        background: $light_green;
+      }
+
+      > .msginfo-fields {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-between;
+
+        > .msginfo-fieldgroup {
+          flex-grow: 0;
+          display: flex;
+          flex-flow: row wrap;
+          &:first-child { flex-wrap: nowrap;}
+        }
+
+        input {
+          margin-left: 0.5ex;
+        }
+
+        input[type="text"] {
+          width: 8ex;
+          margin-right: 2ex;
+        }
+      }
+    }
+  }
+  > .MessageContent {
+    flex: 1 1 100%;
+    @include flex;
+
+    > div.react-tabs {
+      flex: 1 1 100%;
+      @include flex;
+      @include blue-box(0);
+
+      > ul[role='tablist'] {
+        flex: 0 0 auto;
+        @include flex(row);
+
+        margin: 2px 2px 0 2px;
+        padding: 0;
+
+        > li[role='tab'] {
+          list-style: none;
+          padding: 6px 12px;
+          @include ui-element;
+
+          border: 1px solid black;
+          border-bottom: none;
+          border-radius: 5px 5px 0 0;
+          //margin-right: 1px;
+
+          &[aria-selected=true] {
+            background: $light_gray;
+            border-bottom: 1px solid $light_gray;
+          }
+        }
+      }
+      > div[role='tabpanel'] {
+        flex: 1 1 auto;
+        @include flex;
+        background: $light_gray;
+        margin: 0 1px 1px 1px;
+        padding: 2px;
+        overflow-y: scroll;
+        align-self: stretch;
+
+
+      }
+    }
+    .EscapedPane {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  input:not([type=button]):disabled, textarea:disabled {
+    background: #F3F3F3;
+  }
+}
+
+[data-validation-error] {
+  background: #FEE;
+}
+
+.ParsedMessage {
+  @include flex;
+
+  .PMTreeNode {
+    @include flex(row);
+    margin-bottom: 5px;
+  }
+
+  .FieldName, {
+    flex: 1 1 10ex;
+    font-weight: bold;
+  }
+
+  .FieldContent {
+    flex: 0 1 100%;
+    @include flex(column);
+    > * { flex: 1 0 auto; }
+  }
+}
+
+
+.HexView {
+  @include flex(row);
+
+  pre:first-child {
+    text-align: right;
+  }
+  pre:last-child {
+    padding-left: 0.5ex;
+  }
+
+  pre, textarea {
+    padding: 2px;
+    font: 13px monospace;
+  }
+  pre {
+    margin-top: 0px;
+    border-top: 0px;
+  }
+  // bug/weirdness workaround
+  div {
+    position: relative;
+    > textarea {
+      height: 100%;
+    }
+  }
+  textarea {
+    height: 100%;
+    margin-top: 0px;
+    border-top: 1px solid black;
+    margin-left: 1ex;
+    margin-right: 1ex;
+  }
+}
+
+
+/*
+  }
+}
+/*
+.headers {
+  border: 1px solid black;
+  flex: 0 0 auto;
+
+  > div {
+  display: inline-block;
+  margin: 0px;
+  text-align: center;
+  font-weight: bold;
+  white-space: nowrap;
+
+  border-left: 1px solid black;
+  &:first-child { border-left: none; }
+
+  }
+}
+
+.scroller {
+  height: 150px;
+  flex: 0 0 auto;
+  overflow-y: scroll;
+  //resize: vertical; need to not break the rest of the layout!
+  border-top: none;
+  outline: 0; //don't highlight when focused;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    cursor: default;
+
+    tr.pending  { color: #AAAAAA; }
+
+    td { border: 1px solid black; }
+    tr:first-child td { border-top: none; }
+    tr:last-child  td { border-bottom: none; }
+    td:first-child    { border-left: none; }
+    td:last-child     { border-right: none; }
+  }
+}
+
+
+#content_tabs {
+*/
+
+
+
+
+/*
+    //border: none; padding: 0; margin: 0;
+
+    display: flex;
+    flex-flow: column nowrap;
+    ul { flex: 0 0 auto; }
+    > div {
+      height: 100%;
+      flex: 1 1 auto;
+      overflow: auto;
+      //margin: 6px 0 0 0;
+      padding: 1ex;
+    }
+
+    fieldset {
+      margin: 0;
+      width: 100%;
+      @include blue-box;
+    }
+    &.pending fieldset {
+      background: $light_green;
+    }
+
+    label {
+      display: flex;
+      flex-flow: row nowrap;
+      :first-child { min-width: 120px; }
+      :last-child { flex-grow: 1; }
+    }
+
+    input, textarea {
+      &:disabled {
+        background: #EEE;
+      }
+    }
+*/

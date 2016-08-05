@@ -1,0 +1,54 @@
+:ruby
+  presets = {
+    'Generic Text'    => 'PlainText',
+    'Generic Binary'  => 'RawMessage' ,
+    'DNS (TCP)'       => 'Dns::TcpPacket' ,
+    'HTTP (Text)'     => 'DumbHttp::Message',
+    'HTTP (Binary)'   => 'DumbHttp::BinMessage',
+  }
+  opt_fields = {
+    lhost: 'Proxy Host',
+    lport: 'Proxy Port',
+    dhost: 'Destination Host',
+    dport: 'Destination Port',
+    class_name: 'Parser Class Name',
+    class_file: 'Parser Class File (optional)'
+  }
+%html
+  %head
+    %meta(charset="UTF-8")
+    %title Custom Protocol Proxy Configuration
+    %link(rel="stylesheet" type="text/css" media="all" href="/config.css")
+  %body
+    %h1 Proxy Configuration
+    %div.main
+      - if defined? err_msg and !err_msg.nil?
+        %div.error= err_msg
+      %form.grid(action="/config" method='post')
+        %div
+          %label(for="preset")
+            %b Preset Classes
+          %select(id="preset_selector")
+            %option
+            - presets.each do |k,v|
+              %option(value=v)= k
+          :javascript
+            var ps = document.getElementById('preset_selector');
+            ps.onchange = function() {
+              document.getElementById('config_class_name').value = ps.value;
+              document.getElementById('config_class_file').value = '';
+            }
+        %hr
+        - opt_fields.each do |k, name|
+          %div
+            %label(for="config_#{k}")= name
+            %input(id="config_#{k}" name=k value="#{opt_vals[k]}")
+        %div
+          %label
+          %input(type="submit" value="Update")
+      %p
+        Configuration for UDP, SSL, debugging, and other options is still to-do.
+        Please use command line flags for now.
+      %p
+        Note: Changing host/port options when UDP flag is specified is
+        currently broken; please restart BinProxy to change UDP host/port.

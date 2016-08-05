@@ -1,0 +1,36 @@
+{
+  "name": "ui",
+  "version": "1.0.0",
+  "description": "toolchain to build JS UI for binproxy",
+  "repository": "n/a",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "SEE LICENSE IN PROJECT ROOT",
+  "//": "immutable version locked due to morearty peer dep",
+  "dependencies": {
+    "babel-eslint": "^6.0.4",
+    "babel-loader": "^6.2.4",
+    "babel-plugin-transform-object-rest-spread": "^6.8.0",
+    "babel-polyfill": "^6.9.0",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-react": "^6.5.0",
+    "eslint": "^2.10.2",
+    "eslint-import-resolver-webpack": "^0.2.4",
+    "eslint-loader": "^1.3.0",
+    "eslint-plugin-import": "^1.8.0",
+    "eslint-plugin-react": "^5.1.1",
+    "fixed-data-table": "^0.6.0",
+    "humane-js": "^3.2.2",
+    "immutable": "^3.7.6",
+    "moment": "^2.13.0",
+    "morearty": "^0.7.25",
+    "npm-check": "^5.2.1",
+    "react": "^15.1.0",
+    "react-dom": "^15.0.0",
+    "react-tabs": "^0.5.3",
+    "webpack": "^1.13.1"
+  }
+}

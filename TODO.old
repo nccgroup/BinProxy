@@ -1,0 +1,44 @@
+Top priorities:
+
+internal UDP support
+
+Better handling of syntax, etc, errors in parser class
+
+Load history on connect
+ - indicate whether live
+ - client side: ignore dups on reconnect?
+
+Config panel, ports/hosts
+ maybe a file for long-lived config?
+
+Some Sort of Parameterized BinData classes, or at least an HTTP wrapper?
+ - maybe better to leave that to burp
+ (maybe there should be a bindata burp plugin)
+
+Need better validation of params, e.g. NaN port is converted to 0, and gives "need root privs" error.
+
+A bad tls handshake (e.g. trying to connect to `ncat -c cat -l ...` ) just looks like the peer has disconnected; make this more easily diagnosable.
+
+class loading: should be able to specify simple name like "dns" or "http", and have a whole module with the appropriate class like 'dns::packet' loaded.
+
+**
+wrap update_state in something that dups it, so you can't accidentally mutate it
+do something so that SIDs don't get reset on proxy restart
+have some way of reloading your bd classes
+store messages in proxy, show previous messages on WS connect (if requested/since a given timestamp or sequence #)
+store raw messages for reparsing
+write them to a file, re-load it?
+maybe have some sort of "switch proto class" flag
+
+indicate when there is a partial message in the buffer
+
+UI
+up/down in list w/ arrow keys
+
+scrub git history / triple check for client related info
+
+customize Pointer annotated_snapshot to wrap value as contents
+
+BUG: last row in message table takes two clicks to highlight
+
+better handling of ipv6, including "localhost"

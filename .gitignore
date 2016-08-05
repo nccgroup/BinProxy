@@ -1,0 +1,11 @@
+.sass-cache
+*.pem
+*.csr
+*.key
+binproxy-*.gem
+.*.swp
+.*.swo
+tags
+vm-images
+certs
+public/ui

@@ -1,0 +1,135 @@
+#!/usr/bin/env ruby
+
+if RUBY_VERSION < "2.3"
+  throw "This program requires ruby 2.3 or later, but RUBY_VERSION is #{RUBY_VERSION}"
+end
+Encoding.default_external = 'BINARY'
+
+require 'binproxy'
+require 'binproxy/logger'
+require 'binproxy/web_console'
+require 'active_support/inflector'
+require 'active_support/core_ext/hash/keys'
+require 'active_support/core_ext/object/blank'
+require 'json'
+require 'trollop'
+require 'haml'
+require 'sass'
+require 'colorize'
+require 'tempfile'
+
+opts = Trollop::options do
+  banner <<END
+Usage: #{$0} [opts] [listen-host listen-port dest-host dest-port]
+  If listen-host is omitted, it is assumed to be localhost.
+  In --socks mode, dest-host and dest-port are optional and ignored.
+
+  [opts] are:
+END
+  opt :class_name, "parser class", default: "RawMessage", short: 'c'
+  opt :class_file, "class file (default: guess from class name)", type: String, short: 'C'
+
+  opt :tls, "Unwrap TLS/SSL"
+  opt :tls_cert, "TLS/SSL certificate file (PEM format)", type: String, short: 'e'
+  opt :tls_key, "TLS/SSL private key file (PEM format)", type: String, short: 'k'
+
+  opt :http_host, "Run web server on this addr", default: 'localhost', short: 'o'
+  opt :http_port, "Run web server on this port", default: 4567, short: 'p'
+
+  opt :debug, "print debugging data to stdout", default: false, short: 'd'
+  opt :debug_extra, "as above, but extra verbose", default: false, short: 'D'
+
+  opt :socks_proxy, 'act as a SOCKSv4 proxy', default: false, short: 'S'
+  opt :http_proxy, 'act as an HTTP proxy (CONNECT only)', default: false, short: 'H'
+  #XXX the above two probably should be mutually exclusive
+end
+
+
+binproxy_root = File.absolute_path(File.join(File.dirname(__FILE__),'..'))
+
+log = BinProxy::Logger::log
+log.progname = 'BinProxy'
+formatter = Logger::Formatter.new
+log.formatter = lambda do |sev,date,prog,msg|
+  colors = {
+    DEBUG: :default,
+    INFO:  :light_white,
+    WARN:  :light_yellow,
+    ERROR: :red,
+    FATAL: :red,
+  }
+  #formatter.call(sev,date,prog,msg).colorize(colors[sev.to_sym] ||:light_blue)
+  line = caller.find {|l| !l.match /logger\.rb/ }
+  cm = line.match(%r|^.*/([^/]+):(\d+):in `(.*)'$|) or raise "Couldn't parse caller() line"
+  msg = msg.gsub /\r?\n/, ("\n" + " " * 25)
+  sprintf( "%-18s %-5s %s\n",
+           "#{cm[1]}:#{cm[2]}", sev, msg
+  ).colorize(colors[sev.to_sym] ||:light_blue)
+end
+log.level = case
+            when opts[:debug_extra] then Logger::DEBUG
+            when opts[:debug]       then Logger::INFO
+            else                         Logger::WARN
+            end
+
+if opts[:tls]
+  if opts[:tls_cert] or opts[:tls_key]
+    Trollop::die :tls_cert, "is required when :tls_key is given" unless opts[:tls_cert]
+    Trollop::die :tls_key, "is required when :tls_cert is given" unless opts[:tls_key]
+    Trollop::die :tls_cert, "must be an existing file" unless File.exists?(opts[:tls_cert])
+    Trollop::die :tls_key, "must be an existing file" unless File.exists?(opts[:tls_key])
+  else
+    log.info("generating a self-signed TLS/SSL cert")
+    #EM currently only supports files, not in-memory strings for cert/key
+    #XXX confirm this no longer leaks files
+    opts[:tls_cert] = Tempfile.create('cert').path
+    opts[:tls_key] = Tempfile.create('key').path
+    out = "yes '' | openssl req -x509 -nodes -days 365 -newkey rsa:1024 -keyout '#{opts[:ssl_key]}' -out '#{opts[:ssl_cert]}' >/dev/null"
+    log << out if log.debug?
+    system(out) #XXX
+  end
+end
+
+if [1,3].include? ARGV.length
+  log.debug 'assuming listen host is localhost'
+  ARGV.unshift 'localhost'
+end
+
+if ARGV.empty?
+  log.warn "No hosts/ports specified; please configure via the web interface."
+elsif (opts[:socks_proxy] or opts[:http_proxy]) and ARGV.length == 2
+  opts.merge! Hash[([ :lhost, :lport ].zip(ARGV))]
+  log.info "Proxying from #{opts[:lhost]}:#{opts[:lport]} to dynamic destination"
+elsif ARGV.length == 4
+  opts.merge! Hash[([ :lhost, :lport, :dhost, :dport ].zip(ARGV))]
+  log.info "Proxying from #{opts[:lhost]}:#{opts[:lport]} to #{opts[:dhost]}:#{opts[:dport]}"
+else
+  Trollop::die "Unexpected number of host/port arguments"
+end
+
+log.info "Constructing Proxy..."
+proxy = BinProxy::Proxy.new(binproxy_root, opts)
+
+log.info "Constructing Web Console..."
+web_console = Sinatra.new(BinProxy::WebConsole) do
+  set opts: opts
+  set proxy: proxy
+  set root: binproxy_root
+  set logging: nil unless opts[:debug_extra]
+end
+
+EventMachine.error_handler do |e|
+  log.err_trace e
+end
+
+log.info "Starting Server..."
+EventMachine.run do
+  Rack::Server.start({
+    app: web_console,
+    server: 'thin',
+    Host: opts[:http_host],
+    Port: opts[:http_port],
+  })
+  Signal.trap('INT') { EM.stop_event_loop }
+  EM.next_tick { log.info "BinProxy is ready" }
+end

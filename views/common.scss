@@ -1,0 +1,90 @@
+@mixin center-block {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@mixin ui-element {
+  cursor: pointer;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
+$light_blue: #F2F9FF;
+$light_green: #F2FFF9;
+$light_gray: #EEE;
+
+@mixin blue-box($pad: 6px) {
+  border: 1px solid black;
+  background: $light_blue;
+  padding-left: $pad;
+  padding-right: $pad;
+}
+
+@mixin flex($dir: column) {
+  display: flex;
+  flex-flow: $dir;
+  //border: 1px dashed red;
+}
+
+//classes from jQueryUI
+@mixin tab-box {
+  ul.ui-tabs-nav {
+    margin: 0px;
+    padding-left: 0px;
+    :focus {
+      outline: none;
+      color: darken($light_blue, 60%);
+    }
+    li {
+      display: inline-block;
+      padding: 2px;
+      border-top: 1px solid black;
+      border-left: 1px solid black;
+      border-right: 1px solid black;
+      a {
+        color: inherit;
+        font-weight: bold;
+        text-decoration: none;
+      }
+      &.ui-tabs-active {
+        background-color: $light_blue;
+        border-bottom: 1px solid $light_blue;
+        margin-bottom: -1px;
+        a {
+        }
+      }
+    }
+  }
+  div.ui-tabs-panel {
+    @include blue-box;
+    margin-top: 0px;
+    padding-bottom: 2px;
+  }
+}
+
+body {
+  background: url('/bright_squares.png'); 
+  font-size: 14px;
+  font-family: 'Helvetica Neue', sans-serif;
+}
+
+div.error {
+  color: red;
+  border: 2px solid red;
+  background: yellow;
+  padding: 2px;
+}
+
+@mixin form-grid($label-width, $input-width) {
+  label {
+    display: inline-block;
+    min-width: $label-width;
+  }
+  input[type="text"],
+  select {
+    display: inline-block;
+    min-width: $input-width;
+  }
+}
