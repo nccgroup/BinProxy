@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    binproxy (0.9.0)
+    binproxy (1.0.0)
       activesupport (~> 4.2.0)
       bindata (~> 2.1.0)
       clipboard (~> 1.0.5)
