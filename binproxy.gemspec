@@ -15,6 +15,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "kramdown" # for previewing the README file
   s.add_development_dependency "rerun"
   s.add_development_dependency "pry"
+  s.add_development_dependency "licensed"
   # These two are incompatible.
   #s.add_development_dependency "pry-byebug"
   #s.add_development_dependency "pry-remote-em"

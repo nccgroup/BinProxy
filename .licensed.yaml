@@ -1,0 +1,15 @@
+allowed:
+   - mit
+   - apache-2.0
+
+ignored:
+  rubygem:
+    - bundler
+
+reviewed:
+  rubygem:
+    - sinatra-websocket # MIT
+    - thin #ruby license
+    - bindata #ruby license
+    - eventmachine #ruby license
+    - concurrent-ruby # MIT
