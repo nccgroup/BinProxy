@@ -15,7 +15,13 @@ require 'json'
 require 'trollop'
 require 'haml'
 require 'sass'
-require 'colorize'
+#require 'colorize' #XXX need license-compatible replacement
+class String
+  def colorize *args
+    return self
+  end
+end
+
 require 'tempfile'
 
 opts = Trollop::options do

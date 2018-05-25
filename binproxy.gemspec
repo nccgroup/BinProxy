@@ -6,6 +6,7 @@ Gem::Specification.new do |s|
   s.summary = 'BinProxy'
   s.description = 'A BinData-powered intercepting proxy for arbitrary TCP streams'
   s.homepage = 'https://github.com/nccgroup/BinProxy'
+  s.license = 'AGPL-3.0-or-later'
   s.author = 'Ryan Koppenhaver'
   s.email = 'ryan.koppenhaver@nccgroup.trust'
   s.files = Dir['{lib,public,views}/**/*']
@@ -30,7 +31,8 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'trollop', '~> 2.1.1'
   s.add_runtime_dependency 'sass', '~> 3.4.9'
   s.add_runtime_dependency 'haml', '~> 4.0.6'
-  s.add_runtime_dependency 'colorize', '~> 0.7.5'
+  # disabled due to license incompatibility
+  #s.add_runtime_dependency 'colorize', '~> 0.7.5'
   s.add_runtime_dependency 'clipboard','~> 1.0.5'
 
   #XXX not realy a BP dep, used for a parser
