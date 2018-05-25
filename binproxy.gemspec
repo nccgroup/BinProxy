@@ -20,12 +20,12 @@ Gem::Specification.new do |s|
   #s.add_development_dependency "pry-byebug"
   #s.add_development_dependency "pry-remote-em"
 
-  s.add_runtime_dependency 'thin', '~>1.6.3'
+  s.add_runtime_dependency 'thin', '~>1.7.2'
   s.add_runtime_dependency 'activesupport', '~> 4.2.0'
   s.add_runtime_dependency 'bindata', '~> 2.1.0'
   s.add_runtime_dependency 'eventmachine', '~> 1.0.4'
   s.add_runtime_dependency 'rbkb', '~> 0.7.2'
-  s.add_runtime_dependency 'sinatra', '~> 1.4.5'
+  s.add_runtime_dependency 'sinatra', '~> 2.0.1'
   s.add_runtime_dependency 'sinatra-websocket', '~> 0.3.1'
   s.add_runtime_dependency 'trollop', '~> 2.1.1'
   s.add_runtime_dependency 'sass', '~> 3.4.9'
