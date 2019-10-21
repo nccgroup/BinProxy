@@ -30,7 +30,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'sinatra-websocket', '~> 0.3.1'
   s.add_runtime_dependency 'trollop', '~> 2.1.1'
   s.add_runtime_dependency 'sass', '~> 3.4.9'
-  s.add_runtime_dependency 'haml', '~> 4.0.6'
+  s.add_runtime_dependency 'haml', '>= 4.0.6', '< 5.2.0'
   # disabled due to license incompatibility
   #s.add_runtime_dependency 'colorize', '~> 0.7.5'
   s.add_runtime_dependency 'clipboard','~> 1.0.5'
