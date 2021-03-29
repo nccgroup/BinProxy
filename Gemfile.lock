@@ -42,7 +42,8 @@ GEM
       tilt
     i18n (0.9.5)
       concurrent-ruby (~> 1.0)
-    kramdown (1.16.2)
+    kramdown (2.3.1)
+      rexml
     licensed (1.0.1)
       licensee (~> 9.0)
       octokit (~> 4.0)
@@ -76,6 +77,7 @@ GEM
     rbkb (0.7.2)
     rerun (0.13.0)
       listen (~> 3.0)
+    rexml (3.2.4)
     rspec (3.1.0)
       rspec-core (~> 3.1.0)
       rspec-expectations (~> 3.1.0)
